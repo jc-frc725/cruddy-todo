@@ -37,10 +37,23 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
-
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+// 1st param = err
+// 2nd param = success
+exports.getNextUniqueId = (err, id) => {
+  // readCounter(callback(err, id) )
+  var counter = readCounter((err, id) => {
+    //return something
+    err ?
+    console.log('Here is what readCounter found on err: ' + id) :
+    console.log('Here is what readCounter found on win: ' + id)
+  });
+  console.log(counter);
+  if (err) {
+    return;
+  } else {
+    counter = counter + 1; // raw integer: '1'
+    return zeroPaddedNumber(counter);
+  }
 };
 
 

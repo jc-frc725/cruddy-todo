@@ -41,19 +41,28 @@ const writeCounter = (count, callback) => {
 // 2nd param = success
 exports.getNextUniqueId = (err, id) => {
   // readCounter(callback(err, id) )
-  var counter = readCounter((err, id) => {
-    //return something
-    err ?
-    console.log('Here is what readCounter found on err: ' + id) :
-    console.log('Here is what readCounter found on win: ' + id)
+
+  // get the next ID, if it exists in file
+  readCounter((err, id) => {
+    let counterFromFile = id;
+    console.log(`read from file: ${id}`);
+    console.log(`err is: ${err}`);
+
+    counter = counterFromFile + 1;
+    console.log(`adding 1 to ${counterFromFile}, now equal to: ${counter}`);
+
+    writeCounter(counter, (err, counterString) => {
+      console.log(`this is what will be written to file: ${counterString}`);
+    });
+    // return zeroPaddedNumber(counterFromFile);
   });
-  console.log(counter);
-  if (err) {
-    return;
-  } else {
-    counter = counter + 1; // raw integer: '1'
-    return zeroPaddedNumber(counter);
-  }
+  // console.log('counterFromFile after using readCounter: ' + counterFromFile);
+  // counter = counter + 1;
+  // err = null;
+  // id = zeroPaddedNumber(counter);
+  console.log(`finished read: ${counter}`);
+  return zeroPaddedNumber(counter);
+
 };
 
 

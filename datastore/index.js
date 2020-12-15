@@ -10,15 +10,31 @@ var items = {};
 exports.create = (text, callback) => {
   // fs.writeFile(path, data, callback)
   // path = ./datastore/data/newTodoList.txt?
+
   // data = {id, text}
   // callback(null, text stuff)
 
   // should be making a new file.txt for every item
   // filename = id
   // file contents = text only, no objects
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+
+  counter.getNextUniqueId((err, id) => {
+    var filePath = path.join(__dirname, 'data', id + '.txt');
+    fs.writeFile(filePath, text, (err, data) => {
+      if (err) {
+        callback(err);;
+      } else {
+        console.log('success?', text);
+        callback(null, {id, text});
+      }
+
+    });
+  });
+
+  //var textData = text;
+
+//  items[id] = text;
+
 };
 
 exports.readAll = (callback) => {

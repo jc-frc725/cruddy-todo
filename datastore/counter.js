@@ -49,16 +49,12 @@ exports.getNextUniqueId = (callback) => {
       callback(err, counterString);
     });
 
-    // callback(err, zeroPaddedNumber(counter));
+//    callback(err, counterString);
   });
 
-  console.log(`finished read: ${zeroPaddedNumber(counter)}`);
-  return zeroPaddedNumber(counter);
-
-
+/*   console.log(`finished read: ${zeroPaddedNumber(counter)}`);
+  return zeroPaddedNumber(counter); */
 };
-
-
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 

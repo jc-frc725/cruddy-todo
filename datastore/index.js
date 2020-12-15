@@ -19,22 +19,16 @@ exports.create = (text, callback) => {
   // file contents = text only, no objects
 
   counter.getNextUniqueId((err, id) => {
-    var filePath = path.join(__dirname, 'data', id + '.txt');
-    fs.writeFile(filePath, text, (err, data) => {
+    var filePath = path.join(exports.dataDir, id + '.txt');
+    fs.writeFile(filePath, text, (err) => {
       if (err) {
-        callback(err);;
+        callback(err);
       } else {
         console.log('success?', text);
         callback(null, {id, text});
       }
-
     });
   });
-
-  //var textData = text;
-
-//  items[id] = text;
-
 };
 
 exports.readAll = (callback) => {

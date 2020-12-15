@@ -41,15 +41,13 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (callback) => {
 
   readCounter((err, id) => {
-    counter = id + 1;
+    id++;
     console.log(`the id: ${id}`);
 
-    writeCounter(counter, (err, counterString) => {
+    writeCounter(id, (err, counterString) => {
       console.log(`this is what will be written to file: ${counterString}`);
       callback(err, counterString);
     });
-
-//    callback(err, counterString);
   });
 
 /*   console.log(`finished read: ${zeroPaddedNumber(counter)}`);

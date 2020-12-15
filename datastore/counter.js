@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
 
+
 var counter = 0;
 
 // Private helper functions ////////////////////////////////////////////////////
@@ -39,29 +40,20 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 // 1st param = err
 // 2nd param = success
-exports.getNextUniqueId = (err, id) => {
-  // readCounter(callback(err, id) )
+exports.getNextUniqueId = (callback) => {
 
-  // get the next ID, if it exists in file
   readCounter((err, id) => {
-    let counterFromFile = id;
-    console.log(`read from file: ${id}`);
-    console.log(`err is: ${err}`);
 
-    counter = counterFromFile + 1;
-    console.log(`adding 1 to ${counterFromFile}, now equal to: ${counter}`);
-
+    counter = id + 1;
     writeCounter(counter, (err, counterString) => {
       console.log(`this is what will be written to file: ${counterString}`);
     });
-    // return zeroPaddedNumber(counterFromFile);
+    callback(err, zeroPaddedNumber(counter));
   });
-  // console.log('counterFromFile after using readCounter: ' + counterFromFile);
-  // counter = counter + 1;
-  // err = null;
-  // id = zeroPaddedNumber(counter);
-  console.log(`finished read: ${counter}`);
+
+  console.log(`finished read: ${zeroPaddedNumber(counter)}`);
   return zeroPaddedNumber(counter);
+
 
 };
 

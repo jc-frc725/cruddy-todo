@@ -8,6 +8,14 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
+  // fs.writeFile(path, data, callback)
+  // path = ./datastore/data/newTodoList.txt?
+  // data = {id, text}
+  // callback(null, text stuff)
+
+  // should be making a new file.txt for every item
+  // filename = id
+  // file contents = text only, no objects
   var id = counter.getNextUniqueId();
   items[id] = text;
   callback(null, { id, text });

@@ -38,17 +38,18 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
-// 1st param = err
-// 2nd param = success
 exports.getNextUniqueId = (callback) => {
 
   readCounter((err, id) => {
-
     counter = id + 1;
+    console.log(`the id: ${id}`);
+
     writeCounter(counter, (err, counterString) => {
       console.log(`this is what will be written to file: ${counterString}`);
+      callback(err, counterString);
     });
-    callback(err, zeroPaddedNumber(counter));
+
+    // callback(err, zeroPaddedNumber(counter));
   });
 
   console.log(`finished read: ${zeroPaddedNumber(counter)}`);

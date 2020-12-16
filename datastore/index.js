@@ -59,24 +59,45 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // write file (filename/path, newdata, cb)
+  var filePath = path.join(exports.dataDir, id + '.txt');
+
+  // should not make new file for non existant id
+  // must look up todo file first, if exists, write, if not, dont
+  fs.readFile(filePath, (err, fileData) => {
+    if (err) {
+      callback(err);
+    } else {
+      fs.writeFile(filePath, text, (err) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, { id, text: id} );
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  // fs.unlink(filePathName, cb)
+  var filePath = path.join(exports.dataDir, id + '.txt');
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback();
+    }
+  });
+
+  // var item = items[id];
+  // delete items[id];
+  // if (!item) {
+  //   // report an error if item not found
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback();
+  // }
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////

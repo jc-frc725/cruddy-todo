@@ -32,19 +32,30 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+/* return: array of todos
+  todo item: {id, item} */
+  fs.readdir(exports.dataDir, (err, files) => {
+    if (err) {
+      throw ('readAll error');
+    } else {
+      var allTodos = _.map(files, (id) => {
+        id = id.substring(0, 5);
+        return {id: id, text: id};
+      });
+      callback(null, allTodos);
+    }
   });
-  callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  var filePath = path.join(exports.dataDir, id + '.txt');
+  fs.readFile(filePath, (err, fileData) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, { id, text: fileData.toString()});
+    }
+  });
 };
 
 exports.update = (id, text, callback) => {

@@ -72,7 +72,7 @@ exports.update = (id, text, callback) => {
         if (err) {
           callback(err);
         } else {
-          callback(null, { id, text: id} );
+          callback(null, { id, 'text': text} );
         }
       });
     }

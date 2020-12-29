@@ -42,16 +42,12 @@ exports.getNextUniqueId = (callback) => {
 
   readCounter((err, id) => {
     id++;
-    console.log(`the id: ${id}`);
 
     writeCounter(id, (err, counterString) => {
-      console.log(`this is what will be written to file: ${counterString}`);
+      // console.log(`this is what will be written to file: ${counterString}`);
       callback(err, counterString);
     });
   });
-
-/*   console.log(`finished read: ${zeroPaddedNumber(counter)}`);
-  return zeroPaddedNumber(counter); */
 };
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////

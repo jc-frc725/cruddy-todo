@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
+const Promise = require('bluebird');
 
 var items = {};
 
@@ -24,7 +25,6 @@ exports.create = (text, callback) => {
       if (err) {
         callback(err);
       } else {
-        console.log('success?', text);
         callback(null, {id, text});
       }
     });
@@ -34,15 +34,27 @@ exports.create = (text, callback) => {
 exports.readAll = (callback) => {
 /* return: array of todos
   todo item: {id, item} */
+  let readFilePromise = Promise.promisify(fs.readFile);
+
+  // construct new Promise
   fs.readdir(exports.dataDir, (err, files) => {
     if (err) {
       throw ('readAll error');
     } else {
-      var allTodos = _.map(files, (id) => {
-        id = id.substring(0, 5);
-        return {id: id, text: id};
+      // populate an array of Promises
+      var allTodos = _.map(files, (fileName) => {
+        let id = fileName.substring(0, 5);
+        // readFile (filepath, file's data within)
+        return readFilePromise(path.join(exports.dataDir, fileName))
+          .then(fileData => {
+            return {id: id, text: fileData.toString()};
+          });
       });
-      callback(null, allTodos);
+      Promise.all(allTodos)
+        .then(results =>
+          callback(null, results))
+        .catch(err =>
+          callback(err));
     }
   });
 };
@@ -90,14 +102,6 @@ exports.delete = (id, callback) => {
     }
   });
 
-  // var item = items[id];
-  // delete items[id];
-  // if (!item) {
-  //   // report an error if item not found
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback();
-  // }
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
